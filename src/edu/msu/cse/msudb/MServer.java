@@ -48,6 +48,8 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 
+//test 
+
 public class MServer {
 	public static int maxMessageSize = 1024 * 1024;
 
