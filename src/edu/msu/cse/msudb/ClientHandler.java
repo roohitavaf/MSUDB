@@ -32,7 +32,9 @@ public class ClientHandler implements Runnable {
 		this.connection = c;
 
 	}
+	
 
+	
 	@Override
 	public void run() {
 		//System.out.println("A Client message received!:" + (String)msg);
