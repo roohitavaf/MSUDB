@@ -6,7 +6,6 @@ import com.sleepycat.je.DatabaseEntry;
 
 public class MainDBCompartor  implements Comparator {
 
-	@Override
 	public int compare(Object d1, Object d2) {
 		 byte[] b1 = (byte[])d1;
 	     byte[] b2 = (byte[])d2;

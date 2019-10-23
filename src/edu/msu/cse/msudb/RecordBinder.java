@@ -19,7 +19,7 @@ public class RecordBinder extends TupleBinding {
 	@Override
 	public Object entryToObject(TupleInput ti) {
 		Record r = new Record();
-		r.sr = ti.readInt();
+		r.sr = ti.readByte();
 		r.ut = ti.readLong();
 		/*
 		 * Test commented for test purposes int sizeOfDep = ti.readInt(); r.dv =
@@ -28,15 +28,16 @@ public class RecordBinder extends TupleBinding {
 		 */
 		
 		String deps = ti.readString();
-		r.dv = new HashMap<Integer, Long>();
+		r.dv = new HashMap<Byte, Long>();
 		if (!deps.equals(MServer.emptyElement)) {
 			try {
 				String[] depsPart = deps.split(MServer.interDepItemDelimiter);
 				for (String depItem : depsPart) {
-					r.dv.put(new Integer(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
-							new Long((depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter + 1)))));
+					r.dv.put(new Byte(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
+							new Long((depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter) + 1))));
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.out.println(deps);
 			}
 		}
@@ -56,7 +57,7 @@ public class RecordBinder extends TupleBinding {
 	public void objectToEntry(Object o, TupleOutput to) {
 		// TODO Auto-generated method stub
 		Record r = (Record) o;
-		to.writeInt(r.sr);
+		to.writeByte(r.sr);
 		to.writeLong(r.ut);
 		/*
 		 * Test comment for test. to.writeInt(r.dv.size()); for
@@ -64,17 +65,19 @@ public class RecordBinder extends TupleBinding {
 		 * dvItem.getKey(); long v = dvItem.getValue(); to.writeInt(dc);
 		 * to.writeLong(v); }
 		 */
-		
+		StringBuffer sb = new StringBuffer();
 		if (r.dv.size() > 0) {
-			StringBuffer sb = new StringBuffer();
-			for (Map.Entry<Integer, Long> dvItem : r.dv.entrySet()) {
+			
+			for (Map.Entry<Byte, Long> dvItem : r.dv.entrySet()) {
 				int dc = dvItem.getKey();
 				long v = dvItem.getValue();
-				sb.append(dc + MServer.intraDepItemDelimiter + v + MServer.interDepItemDelimiter);
+				sb.append(dc).append(MServer.intraDepItemDelimiter).append(v).append(MServer.interDepItemDelimiter);
 			}
 			to.writeString(sb.toString());
 		} else
 			to.writeString(MServer.emptyElement);
+		
+		//to.writeString(sb.toString());
 		to.writeString(r.key);
 		try {
 			to.writeString((new String(r.value, "UTF-8")));

@@ -1,15 +1,17 @@
 package edu.msu.cse.msudb;
 
+import java.io.UnsupportedEncodingException;
+
 public class HeartbeatMessage extends Message {
-	public int dcn;
+	public byte dcn;
 	public long ct;
 	
 	
-	public HeartbeatMessage(String mes) {
+	public HeartbeatMessage(String mes) throws UnsupportedEncodingException {
 		String[] reqParts = mes.split(MServer.mainDelimiter);
 		this.type = reqParts[0];
-		this.dcn = new Integer(reqParts[1]);
-		this.ct = new Long(reqParts[2]);
+		this.dcn = ByteUtil.stringToByte(reqParts[1]);
+		this.ct = ByteUtil.stringToLong(reqParts[2]);
 	}
 
 }

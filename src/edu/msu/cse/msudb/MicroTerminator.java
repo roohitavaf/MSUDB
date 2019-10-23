@@ -9,7 +9,7 @@ public class MicroTerminator implements Runnable{
 	public MicroTerminator(int t) {
 		length = t;
 	}
-	@Override
+	
 	public void run() {
 		MServer.collect = false;
 		MServer.microTerminatorTimer.shutdown();

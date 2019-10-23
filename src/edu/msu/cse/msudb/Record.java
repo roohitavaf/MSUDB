@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Record {
-	public int sr; 
+	public byte sr; 
 	public Long ut;
-	public HashMap<Integer, Long> dv;
+	public HashMap<Byte, Long> dv;
 	public String key;
 	public byte[] value;
 }

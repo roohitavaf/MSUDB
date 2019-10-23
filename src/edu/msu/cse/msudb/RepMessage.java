@@ -5,17 +5,17 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 
 public class RepMessage extends Message {
-	public int dcn;
+	public byte dcn;
 	public long ut;
-	public int preDc;
+	public byte preDc;
 	public long preUt;
-	public HashMap<Integer, Long> dv = new HashMap<Integer, Long>();
+	public HashMap<Byte, Long> dv = new HashMap<Byte, Long>();
 	public String key;
 	public String value;
 	
 	
 
-	public RepMessage(String mes) {
+	public RepMessage(String mes) throws UnsupportedEncodingException {
 
 		int firstColon = mes.indexOf(MServer.mainDelimiter);
 		int secondColon = mes.indexOf(MServer.mainDelimiter, firstColon + 1);
@@ -26,13 +26,13 @@ public class RepMessage extends Message {
 		int seventhColon = mes.indexOf(MServer.mainDelimiter, sixthColon + 1);
 
 		this.type = mes.substring(0, firstColon);
-		this.dcn = new Integer (mes.substring(firstColon + 1, secondColon));
-		this.ut =  new Long (mes.substring(secondColon + 1, thirdColon));
+		this.dcn = ByteUtil.stringToByte(mes.substring(firstColon + 1, secondColon));
+		this.ut =  ByteUtil.stringToLong(mes.substring(secondColon + 1, thirdColon));
 		String pre = mes.substring(thirdColon + 1, forthColon);
 		if (!pre.equals(MServer.emptyElement))
 		{
-			this.preDc = new Integer(pre);
-			this.preUt = new Long(mes.substring(forthColon + 1, fifthColon));
+			this.preDc = ByteUtil.stringToByte(pre);
+			this.preUt = ByteUtil.stringToLong(mes.substring(forthColon + 1, fifthColon));
 		}
 		else 
 		{
@@ -45,8 +45,8 @@ public class RepMessage extends Message {
 		if (!deps.equals(MServer.emptyElement)) {
 			String[] depsItem = deps.split(MServer.interDepItemDelimiter);
 			for (String depItem : depsItem) {
-				this.dv.put(new Integer(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
-						new Long(depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter) + 1)));
+				this.dv.put(ByteUtil.stringToByte(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
+						ByteUtil.stringToLong(depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter) + 1)));
 			}
 		}
 

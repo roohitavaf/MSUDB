@@ -1,14 +1,15 @@
 package edu.msu.cse.msudb;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 public class PutMessage extends Message {
-	public HashMap<Integer, Long> dv = new HashMap<Integer, Long>();
+	public HashMap<Byte, Long> dv = new HashMap<Byte, Long>();
 	public long dt = 0;
 	public String key;
 	public String value;
 
-	public PutMessage(String mes) {
+	public PutMessage(String mes) throws UnsupportedEncodingException {
 
 		int firstColon = mes.indexOf(MServer.mainDelimiter);
 		int secondColon = mes.indexOf(MServer.mainDelimiter, firstColon + 1);
@@ -19,8 +20,8 @@ public class PutMessage extends Message {
 		if (!deps.equals(MServer.emptyElement)) {
 			String[] depsItem = deps.split(MServer.interDepItemDelimiter);
 			for (String depItem : depsItem) {
-				long depValue = new Long(depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter) + 1));
-				this.dv.put(new Integer(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
+				long depValue = ByteUtil.stringToLong(depItem.substring(depItem.indexOf(MServer.intraDepItemDelimiter) + 1));
+				this.dv.put(ByteUtil.stringToByte(depItem.substring(0, depItem.indexOf(MServer.intraDepItemDelimiter))),
 						depValue);
 				if (depValue > dt)
 					dt = depValue;
